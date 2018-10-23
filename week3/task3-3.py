@@ -1,9 +1,6 @@
 import numpy as np
 import pandas
 from sklearn.metrics import roc_auc_score
-from sklearn.model_selection import KFold, GridSearchCV
-from sklearn import datasets
-from sklearn.feature_extraction.text import TfidfVectorizer
 
 np.set_printoptions(linewidth=120, threshold=np.inf)
 
