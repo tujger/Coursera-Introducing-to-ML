@@ -1,3 +1,5 @@
+# Предобработка данных в Pandas
+
 import numpy as np
 import pandas
 np.set_printoptions(linewidth=250, threshold=np.inf)

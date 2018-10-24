@@ -1,8 +1,9 @@
+# Метрики качества классификации
+
 import numpy as np
 import pandas
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
 from sklearn.metrics import roc_auc_score, precision_recall_curve
-from matplotlib import pyplot
 
 np.set_printoptions(linewidth=120, threshold=np.inf)
 

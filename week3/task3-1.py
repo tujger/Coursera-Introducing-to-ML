@@ -1,9 +1,9 @@
+# Опорные объекты
+
 import numpy as np
 import pandas
 from sklearn.svm import SVC
-from sklearn.linear_model import Perceptron
-from sklearn.metrics import accuracy_score
-from sklearn.preprocessing import StandardScaler
+
 
 np.set_printoptions(linewidth=120, threshold=np.inf)
 

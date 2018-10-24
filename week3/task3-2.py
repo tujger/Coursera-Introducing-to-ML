@@ -1,5 +1,6 @@
+# Анализ текстов
+
 import numpy as np
-import pandas
 from sklearn.svm import SVC
 from sklearn.model_selection import KFold, GridSearchCV
 from sklearn import datasets

@@ -1,3 +1,5 @@
+# Выбор числа соседей
+
 import numpy as np
 import pandas
 from sklearn.model_selection import KFold, cross_val_score

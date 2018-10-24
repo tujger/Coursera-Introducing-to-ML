@@ -1,3 +1,5 @@
+# Нормализация признаков
+
 import numpy as np
 import pandas
 from sklearn.linear_model import Perceptron

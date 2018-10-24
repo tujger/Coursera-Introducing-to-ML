@@ -1,3 +1,6 @@
+# Важность признаков
+
+
 import numpy as np
 import pandas
 from sklearn.tree import DecisionTreeClassifier
@@ -6,7 +9,6 @@ np.set_printoptions(linewidth=250, threshold=np.inf)
 
 # PassengerId,Survived,Pclass,Name,Sex,Age,SibSp,Parch,Ticket,Fare,Cabin,Embarked
 
-# Задание по программированию: Важность признаков
 
 # Загрузите выборку из файла titanic.csv с помощью пакета Pandas.
 # Оставьте в выборке четыре признака: класс пассажира (Pclass), цену билета (Fare), возраст пассажира (Age) и его пол (Sex).

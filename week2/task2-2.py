@@ -1,6 +1,6 @@
+# Выбор метрики
+
 import numpy as np
-import pandas
-import sklearn
 from sklearn.model_selection import KFold, cross_val_score
 from sklearn.neighbors import KNeighborsRegressor
 from sklearn.preprocessing import scale
