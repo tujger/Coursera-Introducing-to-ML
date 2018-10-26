@@ -95,5 +95,3 @@ for n in range(1,21):
     pylab.imshow(data_new)
     pylab.title(n)
     pylab.show()
-
-
