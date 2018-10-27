@@ -1,7 +1,6 @@
 # Уменьшение количества цветов изображения
 
 import numpy as np
-import pandas
 from sklearn.cluster import KMeans
 from skimage.io import imread
 import skimage
