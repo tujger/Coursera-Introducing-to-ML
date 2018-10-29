@@ -33,8 +33,6 @@ print(ac, ps, rs, f1)
 
 scores = pandas.read_csv('data/scores.csv')
 
-# true,score_logreg,score_svm,score_knn,score_tree
-
 s1 = round(roc_auc_score(scores['true'], scores['score_logreg']), 2)
 s2 = round(roc_auc_score(scores['true'], scores['score_svm']), 2)
 s3 = round(roc_auc_score(scores['true'], scores['score_knn']), 2)

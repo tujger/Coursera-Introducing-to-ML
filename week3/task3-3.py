@@ -11,8 +11,6 @@ data = pandas.read_csv('data/data-logistic.csv', names=['T', 'A', 'B'], header=N
 X = data.values[:, 1:]
 y = data.values[:, :1].T[0]
 
-# roc = roc_auc_score(train.T, scores)
-
 def euklid(a, b):
     return np.sqrt(np.square(a[0] - b[0]) + np.square(a[1] - b[1]))
 
@@ -36,22 +34,8 @@ def log_regression(X_, y_, k, w, C, epsilon, max_iter):
 
 notreg = log_regression(X, y, 0.1, [.0,.0], 0, 1e-5, 10000)
 
-# notreg_scores = sigmoid(X.values, notreg)
-
 print("Not regularized:",round(roc_auc_score(y, notreg),3))
 
 reg = log_regression(X, y, 0.1, [.0,.0], 10, 1e-5, 10000)
-# reg_scores = sigmoid(X.values, reg)
 
 print("Regularized with C=10:",round(roc_auc_score(y, reg),3))
-
-
-
-# np.gradient()
-#
-# print(calc_regr(1,2))
-# print(calc_regr(3,4))
-
-
-
-

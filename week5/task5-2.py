@@ -40,7 +40,6 @@ for n in [1, 0.5, 0.3, 0.2, 0.1]:
     min_test_logloss = 1e6
     min_test_i = 0
     for i, y_pred in enumerate(clf.staged_decision_function(X_test)):
-        # test_scores1.append(clf.loss_(y_test, y_pred))
         y_pred = 1.0 / (1.0 + np.exp(-y_pred))
         logloss = log_loss(y_test, y_pred)
         test_scores.append(logloss)

@@ -12,8 +12,6 @@ image = imread('data/parrots.jpg')
 
 data = skimage.img_as_float(image)
 
-# print(data)
-
 pylab.imshow(data)
 pylab.title('original')
 pylab.show()
