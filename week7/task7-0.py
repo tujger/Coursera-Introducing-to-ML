@@ -12,6 +12,8 @@ from sklearn.model_selection import KFold, cross_val_score
 from sklearn.ensemble import GradientBoostingClassifier, RandomForestClassifier
 import datetime
 from sklearn.preprocessing import StandardScaler
+import matplotlib.pyplot as plt
+
 
 
 np.set_printoptions(linewidth=120, threshold=np.inf)
@@ -30,16 +32,18 @@ def X_prepare(data):
     X.fillna(0, inplace=True)
 
     # add mean values of heroes valuations and XP
-    # X['r_gold_mean']=np.mean(X.loc[:,['r1_gold','r2_gold','r3_gold','r4_gold','r5_gold']], axis=1)
-    # X['d_gold_mean']=np.mean(X.loc[:,['d1_gold','d2_gold','d3_gold','d4_gold','d5_gold']], axis=1)
-    # X['r_xp_mean']=np.mean(X.loc[:,['r1_xp','r2_xp','r3_xp','r4_xp','r5_xp']], axis=1)
-    # X['d_xp_mean']=np.mean(X.loc[:,['d1_xp','d2_xp','d3_xp','d4_xp','d5_xp']], axis=1)
+    X['r_gold_mean']=np.mean(X.loc[:,['r1_gold','r2_gold','r3_gold','r4_gold','r5_gold']], axis=1)
+    X['d_gold_mean']=np.mean(X.loc[:,['d1_gold','d2_gold','d3_gold','d4_gold','d5_gold']], axis=1)
+    X['r_gold_min']=np.min(X.loc[:,['r1_gold','r2_gold','r3_gold','r4_gold','r5_gold']], axis=1)
+    X['d_gold_min']=np.min(X.loc[:,['d1_gold','d2_gold','d3_gold','d4_gold','d5_gold']], axis=1)
+    X['r_xp_mean']=np.mean(X.loc[:,['r1_xp','r2_xp','r3_xp','r4_xp','r5_xp']], axis=1)
+    X['d_xp_mean']=np.mean(X.loc[:,['d1_xp','d2_xp','d3_xp','d4_xp','d5_xp']], axis=1)
 
     # scale all values
     X = pandas.DataFrame(StandardScaler().fit_transform(X), columns=X.columns.values)
 
     # drop not important, not measured data and data added as a mean values
-    # X.drop(['start_time','r1_gold','r2_gold','r3_gold','r4_gold','r5_gold','d1_gold','d2_gold','d3_gold','d4_gold','d5_gold','r1_xp','r2_xp','r3_xp','r4_xp','r5_xp','d1_xp','d2_xp','d3_xp','d4_xp','d5_xp','r1_hero','r2_hero','r3_hero','r4_hero','r5_hero','d1_hero','d2_hero','d3_hero','d4_hero','d5_hero'], 1, inplace=True)
+    X.drop(['start_time','r1_gold','r2_gold','r3_gold','r4_gold','r5_gold','d1_gold','d2_gold','d3_gold','d4_gold','d5_gold','r1_xp','r2_xp','r3_xp','r4_xp','r5_xp','d1_xp','d2_xp','d3_xp','d4_xp','d5_xp','r1_hero','r2_hero','r3_hero','r4_hero','r5_hero','d1_hero','d2_hero','d3_hero','d4_hero','d5_hero'], 1, inplace=True)
 
     return X
 
@@ -48,15 +52,15 @@ X = X_prepare(train_data)
 y = train_data.loc[:, 'radiant_win']
 
 # first, get the most important features
-# clf = DecisionTreeClassifier()
-# clf.fit(X, y)
+clf = DecisionTreeClassifier()
+clf.fit(X, y)
 
-# important_columns = list(reversed(X.columns.values[clf.feature_importances_.argsort()[-10:]]))
+important_columns = list(reversed(X.columns.values[clf.feature_importances_.argsort()[-10:]]))
 
-# print('Features:', important_columns)
+print('Features:', important_columns)
 
 # keep only important features
-# X = X.loc[:, important_columns]
+X = X.loc[:, important_columns]
 
 # total games                    97230
 # first_blood_time               77677
@@ -74,11 +78,13 @@ y = train_data.loc[:, 'radiant_win']
 
 
 kfold = KFold(shuffle=True, n_splits=5)
-total_scores = [0.0]
 
+total_scores = []
 for i in [10,20,30,40,50]:
     print(i)
 
+    scores = []
+    n_start_time = datetime.datetime.now()
     for train, test in kfold.split(X):
         clf = GradientBoostingClassifier(n_estimators=i, verbose=False)
 
@@ -89,14 +95,20 @@ for i in [10,20,30,40,50]:
         y_pred = clf.predict(X.iloc[test])
 
         score = roc_auc_score(y.iloc[test], y_pred)
-        total_scores.append(score)
+        scores.append(score)
         print("score:", score, ', learning rate:',clf.learning_rate, ', time elapsed:', datetime.datetime.now() - start_time)
+    print('mean score:', np.mean(scores), ', time elapsed:', datetime.datetime.now() - n_start_time)
+    total_scores.append(np.mean(scores))
+
+plt.figure()
+plt.plot(total_scores)
+plt.show()
 
 X_test = X_prepare(test_data.drop(['match_id'], 1))
-# X_test = X_test.loc[:, important_columns]
+X_test = X_test.loc[:, important_columns]
 y_pred = clf.predict_proba(X_test)
 
 res = pandas.DataFrame(y_pred[:,1], test_data.loc[:, 'match_id'].values, columns=['radiant_win'])
 res.index.name = 'match_id'
 
-res.to_csv("data/result-1.txt")
+res.to_csv("data/result.txt")
