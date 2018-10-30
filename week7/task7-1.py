@@ -84,7 +84,7 @@ for i in [5,10,15,20,25,30,35,40,45,50,55,60]:
 
         scores = []
         for j, y_pred in enumerate(clf.staged_decision_function(X.iloc[train,:])):
-            # y_pred = 1.0 / (1.0 + np.exp(-y_pred))
+            y_pred = 1.0 / (1.0 + np.exp(-y_pred))
             score = roc_auc_score(y.iloc[train], y_pred)
             scores.append(score)
 
@@ -114,6 +114,14 @@ plt.show()
 X_test = X_prepare(test_data.drop(['match_id'], 1))
 # X_test = X_test.loc[:, important_columns]
 y_pred = clf.predict_proba(X_test)
+
+
+# pred = []
+# for j, y_pred in enumerate(clf.staged_decision_function(X_test)):
+#     y_pred = 1.0 / (1.0 + np.exp(-y_pred))
+#     pred.append(y_pred)
+#
+# pred = np.mean(pred, axis=1)
 
 res = pandas.DataFrame(y_pred[:,1], test_data.loc[:, 'match_id'].values, columns=['radiant_win'])
 res.index.name = 'match_id'
