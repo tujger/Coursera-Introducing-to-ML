@@ -1,0 +1,99 @@
+Features with missed values (12 rows from 97230):
+first_blood_time               77677
+first_blood_team               77677
+first_blood_player1            77677
+first_blood_player2            53243
+radiant_bottle_time            81539
+radiant_courier_time           96538
+radiant_flying_courier_time    69751
+radiant_first_ward_time        95394
+dire_bottle_time               81087
+dire_courier_time              96554
+dire_flying_courier_time       71132
+dire_first_ward_time           95404
+dtype: int64
+Estimators: 5
+Score: 0.5864927831406058 , time elapsed: 0:00:02.912025
+Score: 0.5851810442270324 , time elapsed: 0:00:02.900023
+Score: 0.5818886874009954 , time elapsed: 0:00:02.890041
+Score: 0.5786114628526352 , time elapsed: 0:00:02.994007
+Score: 0.5776608913809971 , time elapsed: 0:00:03.041026
+Mean score: 0.5819669738004531 , time elapsed: 0:00:14.746122
+Estimators: 10
+Score: 0.6081460685313718 , time elapsed: 0:00:05.033043
+Score: 0.606910365556281 , time elapsed: 0:00:05.043042
+Score: 0.6053915295140185 , time elapsed: 0:00:05.011041
+Score: 0.6097520406086211 , time elapsed: 0:00:05.113045
+Score: 0.6047033321106389 , time elapsed: 0:00:05.123042
+Mean score: 0.6069806672641862 , time elapsed: 0:00:25.333211
+Estimators: 15
+Score: 0.6140879092672684 , time elapsed: 0:00:07.982066
+Score: 0.62104023999825 , time elapsed: 0:00:07.520061
+Score: 0.6232430563343426 , time elapsed: 0:00:07.099059
+Score: 0.6230202602407181 , time elapsed: 0:00:08.251067
+Score: 0.6152378976022559 , time elapsed: 0:00:07.584084
+Mean score: 0.619325872688567 , time elapsed: 0:00:38.446318
+Estimators: 20
+Score: 0.6217322981612852 , time elapsed: 0:00:09.480079
+Score: 0.6260893065585675 , time elapsed: 0:00:09.470056
+Score: 0.6297164745289467 , time elapsed: 0:00:09.499078
+Score: 0.6183345659920163 , time elapsed: 0:00:09.676080
+Score: 0.6282487490027746 , time elapsed: 0:00:09.236094
+Mean score: 0.624824278848718 , time elapsed: 0:00:47.371410
+Estimators: 25
+Score: 0.6261406990635477 , time elapsed: 0:00:12.379086
+Score: 0.6268516761366808 , time elapsed: 0:00:13.415113
+Score: 0.6311671479878176 , time elapsed: 0:00:14.449119
+Score: 0.6316146622496384 , time elapsed: 0:00:11.434112
+Score: 0.6315791183849064 , time elapsed: 0:00:11.366096
+Mean score: 0.6294706607645182 , time elapsed: 0:01:03.056532
+Estimators: 30
+Score: 0.6275922817227075 , time elapsed: 0:00:13.337091
+Score: 0.6328008351899663 , time elapsed: 0:00:13.409112
+Score: 0.6349744861363017 , time elapsed: 0:00:13.393112
+Score: 0.6323292018099039 , time elapsed: 0:00:14.223120
+Score: 0.6307913892456455 , time elapsed: 0:00:14.059118
+Mean score: 0.6316976388209049 , time elapsed: 0:01:08.432554
+Estimators: 35
+Score: 0.6335641724555258 , time elapsed: 0:00:17.257166
+Score: 0.6348356634499766 , time elapsed: 0:00:16.535117
+Score: 0.6356477095369178 , time elapsed: 0:00:16.724140
+Score: 0.6333054808929911 , time elapsed: 0:00:16.691159
+Score: 0.6335027682062864 , time elapsed: 0:00:15.642113
+Mean score: 0.6341711589083395 , time elapsed: 0:01:22.862696
+Estimators: 40
+Score: 0.6330772208403843 , time elapsed: 0:00:18.294152
+Score: 0.6416355782446496 , time elapsed: 0:00:19.123178
+Score: 0.6366413263643265 , time elapsed: 0:00:17.819143
+Score: 0.6331521225324717 , time elapsed: 0:00:19.228161
+Score: 0.6362682758646979 , time elapsed: 0:00:19.006159
+Mean score: 0.6361549047693059 , time elapsed: 0:01:33.482785
+Estimators: 45
+Score: 0.6340444489139925 , time elapsed: 0:00:22.298210
+Score: 0.6389551339785471 , time elapsed: 0:00:19.869164
+Score: 0.6363179757556087 , time elapsed: 0:00:20.351181
+Score: 0.6394121925244701 , time elapsed: 0:00:20.186188
+Score: 0.6395626657390672 , time elapsed: 0:00:20.265161
+Mean score: 0.6376584833823371 , time elapsed: 0:01:42.978856
+Estimators: 50
+Score: 0.6414525122441747 , time elapsed: 0:00:22.491170
+Score: 0.6348606807731748 , time elapsed: 0:00:22.700188
+Score: 0.6367894494877852 , time elapsed: 0:00:22.191184
+Score: 0.6387340197688143 , time elapsed: 0:00:22.061184
+Score: 0.637680895904807 , time elapsed: 0:00:22.681209
+Mean score: 0.6379035116357512 , time elapsed: 0:01:52.135935
+Estimators: 55
+Score: 0.6369663942910185 , time elapsed: 0:00:24.468202
+Score: 0.6438474870384534 , time elapsed: 0:00:25.582213
+Score: 0.6413588294461208 , time elapsed: 0:00:25.983239
+Score: 0.6402160370884188 , time elapsed: 0:00:25.427211
+Score: 0.6357431205966799 , time elapsed: 0:00:26.713242
+Mean score: 0.6396263736921383 , time elapsed: 0:02:08.184042
+Estimators: 60
+Score: 0.6377772136820156 , time elapsed: 0:00:27.513211
+Score: 0.6399572976386237 , time elapsed: 0:00:28.067231
+Score: 0.6425377402107255 , time elapsed: 0:00:30.890272
+Score: 0.6416423686264828 , time elapsed: 0:00:34.936275
+Score: 0.6403270152670579 , time elapsed: 0:00:28.341253
+Mean score: 0.6404483270849811 , time elapsed: 0:02:29.758219
+Best estimators: 60 , time elapsed: 0:00:35.852274
