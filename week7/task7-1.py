@@ -8,6 +8,7 @@ from sklearn.ensemble import GradientBoostingClassifier
 import datetime
 from sklearn.preprocessing import StandardScaler
 import matplotlib.pyplot as plt
+from sklearn.tree import DecisionTreeClassifier
 
 np.set_printoptions(linewidth=120, threshold=np.inf)
 
@@ -19,7 +20,7 @@ train_data = pandas.read_csv("data/features.csv", index_col="match_id")
 test_data = pandas.read_csv("data/features_test.csv")
 
 
-def X_prepare(data):
+def prepare_pure_data(data):
     # remove final data if exists
     X = data.loc[:, :"dire_first_ward_time"]
 
@@ -32,6 +33,76 @@ def X_prepare(data):
     return X
 
 
+def prepare_synthetic(data):
+    # remove final data if exists
+    X = data.loc[:, :"dire_first_ward_time"]
+
+    # fill n/a with zeros
+    X.fillna(0, inplace=True)
+
+    # add mean values of heroes valuations and XP
+    X["r_gold_mean"]=np.mean(X.loc[:,["r1_gold","r2_gold","r3_gold","r4_gold","r5_gold"]], axis=1)
+    X["d_gold_mean"]=np.mean(X.loc[:,["d1_gold","d2_gold","d3_gold","d4_gold","d5_gold"]], axis=1)
+    # X["r_gold_min"]=np.min(X.loc[:,["r1_gold","r2_gold","r3_gold","r4_gold","r5_gold"]], axis=1)
+    # X["d_gold_min"]=np.min(X.loc[:,["d1_gold","d2_gold","d3_gold","d4_gold","d5_gold"]], axis=1)
+    X["r_xp_mean"]=np.mean(X.loc[:,["r1_xp","r2_xp","r3_xp","r4_xp","r5_xp"]], axis=1)
+    X["d_xp_mean"]=np.mean(X.loc[:,["d1_xp","d2_xp","d3_xp","d4_xp","d5_xp"]], axis=1)
+
+    # scale all values
+    X = pandas.DataFrame(StandardScaler().fit_transform(X), columns=X.columns.values)
+
+    # drop not important, not measured data and data added as a mean values
+    X.drop(["start_time","lobby_type","r1_gold","r2_gold","r3_gold","r4_gold","r5_gold","d1_gold","d2_gold","d3_gold","d4_gold","d5_gold","r1_xp","r2_xp","r3_xp","r4_xp","r5_xp","d1_xp","d2_xp","d3_xp","d4_xp","d5_xp","r1_hero","r2_hero","r3_hero","r4_hero","r5_hero","d1_hero","d2_hero","d3_hero","d4_hero","d5_hero"], 1, inplace=True)
+
+    return X
+
+
+def process_clf(X,y):
+    total_scores = []
+    kfold = KFold(shuffle=True, n_splits=5)
+    for n in [5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60]:
+        print("Estimators:", n)
+
+        mean_scores = []
+        n_start_time = datetime.datetime.now()
+
+        clf = GradientBoostingClassifier(n_estimators=n, verbose=False)
+
+        # cross-validation
+        for train, test in kfold.split(X):
+            start_time = datetime.datetime.now()
+
+            clf.fit(X.iloc[train, :], y.iloc[train])
+
+            y_pred = clf.predict(X.iloc[test])
+            score = roc_auc_score(y.iloc[test], y_pred)
+            mean_scores.append([score])
+            print("Score:", score, ", time elapsed:", datetime.datetime.now() - start_time)
+
+        mean_scores = pandas.DataFrame(mean_scores)
+
+        print("Mean score:", np.mean(mean_scores.loc[:, 0]), ", time elapsed:", datetime.datetime.now() - n_start_time)
+        total_scores.append([n, np.mean(mean_scores.loc[:, 0])])
+    total_scores = pandas.DataFrame(total_scores)
+    total_scores = total_scores.set_index((0))
+
+    # plot the curve of quality
+    plt.figure()
+    plt.plot(total_scores.loc[:,1], "b")
+    plt.show()
+
+    start_time = datetime.datetime.now()
+
+    # fitting with the best n_estimators
+    max_quality = total_scores.idxmax()[1]
+    clf = GradientBoostingClassifier(n_estimators=max_quality, verbose=False)
+    clf.fit(X, y)
+
+    print("Best estimators:", max_quality, ", time elapsed:", datetime.datetime.now() - start_time)
+
+    return clf
+
+
 total = len(train_data)
 count = train_data.count()
 count = count[count < total]
@@ -41,58 +112,44 @@ print(count)
 
 # train_data = train_data[:(total//4)]
 
-X = X_prepare(train_data)
+X = prepare_pure_data(train_data)
 y = train_data.loc[:, "radiant_win"]
-
-kfold = KFold(shuffle=True, n_splits=5)
-
-total_scores = []
-
-for n in [5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60]:
-    print("Estimators:", n)
-
-    mean_scores = []
-    n_start_time = datetime.datetime.now()
-
-    clf = GradientBoostingClassifier(n_estimators=n, verbose=False)
-
-    # cross-validation
-    for train, test in kfold.split(X):
-        start_time = datetime.datetime.now()
-
-        clf.fit(X.iloc[train, :], y.iloc[train])
-
-        y_pred = clf.predict(X.iloc[test])
-        score = roc_auc_score(y.iloc[test], y_pred)
-        mean_scores.append([score])
-        print("Score:", score, ", time elapsed:", datetime.datetime.now() - start_time)
-
-    mean_scores = pandas.DataFrame(mean_scores)
-
-    print("Mean score:", np.mean(mean_scores.loc[:, 0]), ", time elapsed:", datetime.datetime.now() - n_start_time)
-    total_scores.append([n, np.mean(mean_scores.loc[:, 0])])
-
-total_scores = pandas.DataFrame(total_scores)
-total_scores = total_scores.set_index((0))
-
-# plot the curve of quality
-plt.figure()
-plt.plot(total_scores.loc[:,1], "b")
-plt.show()
-
-start_time = datetime.datetime.now()
-
-# fitting with the best n_estimators
-max_quality = total_scores.idxmax()[1]
-clf = GradientBoostingClassifier(n_estimators=max_quality, verbose=False)
-clf.fit(X, y)
-
-print("Best estimators:", max_quality, ", time elapsed:", datetime.datetime.now() - start_time)
-
-X_test = X_prepare(test_data.drop(["match_id"], 1))
+clf = process_clf(X,y)
+X_test = prepare_pure_data(test_data.drop(["match_id"], 1))
 y_pred = clf.predict_proba(X_test)
 
 res = pandas.DataFrame(y_pred[:,1], test_data.loc[:, "match_id"].values, columns=["radiant_win"])
 res.index.name = "match_id"
+res.to_csv("data/result-1-a.txt")
 
-res.to_csv("data/result-1.txt")
+
+X = prepare_synthetic(train_data)
+y = train_data.loc[:, "radiant_win"]
+
+# first, get the most important features
+clf = DecisionTreeClassifier()
+clf.fit(X, y)
+
+print("Sum weights for the 10 most important features:", np.sum(sorted(clf.feature_importances_)[-10:]))
+print("Sum weights for the 20 most important features:", np.sum(sorted(clf.feature_importances_)[-20:]))
+print("Sum weights for the 30 most important features:", np.sum(sorted(clf.feature_importances_)[-30:]))
+print("Sum weights for the 40 most important features:", np.sum(sorted(clf.feature_importances_)[-40:]))
+print("Sum weights for the 50 most important features:", np.sum(sorted(clf.feature_importances_)[-50:]))
+
+important_columns = list(reversed(X.columns.values[clf.feature_importances_.argsort()[-10:]]))
+
+print("The most important 50 features:")
+print(important_columns)
+
+# keep only important features
+X = X.loc[:, important_columns]
+
+clf = process_clf(X, y)
+
+X_test = prepare_synthetic(test_data.drop(["match_id"], 1))
+X_test = X_test.loc[:, important_columns]
+y_pred = clf.predict_proba(X_test)
+
+res = pandas.DataFrame(y_pred[:,1], test_data.loc[:, "match_id"].values, columns=["radiant_win"])
+res.index.name = "match_id"
+res.to_csv("data/result-1-b.txt")
