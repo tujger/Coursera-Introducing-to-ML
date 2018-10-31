@@ -1,11 +1,20 @@
+=== Searching with pure data
 GridSearch for 9917460 elements
-Found C: 0.01, score: 0.7165811530314338, estimated time: 0:00:31.102725
+Found C: 0.01, score: 0.716385685738253, estimated time: 0:00:57.681223
+
+=== Searching after removing non-number features
 GridSearch for 8847930 elements
-Found C: 0.01, score: 0.7164539824039204, estimated time: 0:00:27.445323
+Found C: 0.01, score: 0.716386989734913, estimated time: 0:00:51.693435
+
+=== Searching with heroes participation
 Total unique heroes: 108
 GridSearch for 19737690 elements
-Found C: 0.1, score: 0.7517692453889367, estimated time: 0:01:32.691174
-Best C: 0.1, score: 0.7517692453889367
+Found C: 0.1, score: 0.7518115693804185, estimated time: 0:04:23.774106
+
+=== Best result
+Best C: 0.1, score: 0.7518115693804185
+
+=== Finalizing
 Total unique heroes: 108
 Min chance for radiant: 0.86%, game id: 33469
 Max chance for radiant: 99.65%, game id: 4320

@@ -30,6 +30,8 @@ def prepare_pure(data):
 
 def prepare_remove_cat(data):
     X = prepare_pure(data)
+
+    # removing categorial features
     X.drop(["lobby_type","r1_hero","r2_hero","r3_hero","r4_hero","r5_hero","d1_hero","d2_hero","d3_hero","d4_hero","d5_hero"], 1, inplace=True)
     return X
 
@@ -57,7 +59,7 @@ def process_clf(X, y):
     print('GridSearch for', X.size, 'elements')
     start_time = datetime.datetime.now()
     grid = {'C': np.power(10.0, np.arange(-5, 6))}
-    clf = LogisticRegression(solver="lbfgs")
+    clf = LogisticRegression(solver="sag")
     kfold = KFold(n_splits=5, shuffle=True)
     gs = GridSearchCV(clf, grid, scoring='roc_auc', cv=kfold, n_jobs=-1)
     gs.fit(X, y)
@@ -71,24 +73,29 @@ best_clf = 0
 best_score = 0
 best_C = 0
 
-# search for optimal C (gradient boosting)
+# search for optimal C (pure data)
+print("=== Searching with pure data")
 X = prepare_pure(train_data)
 C, score, clf = process_clf(X,y)
 if score > best_score: best_score = score; best_clf = clf; best_C = C
 
 # search for optimal C after removing non-number features (gradient boosting)
+print("\n=== Searching after removing non-number features")
 X = prepare_remove_cat(train_data)
 C, score, clf = process_clf(X,y)
 if score > best_score: best_score = score; best_clf = clf; best_C = C
 
 # search for optimal C with heroes participation (logistic regression)
+print("\n=== Searching with heroes participation")
 X = prepare_heroes_participation(train_data)
 C, score, clf = process_clf(X,y)
 if score > best_score: best_score = score; best_clf = clf; best_C = C
 
+print("\n=== Best result")
 print("Best C: %s, score: %s" % (best_C, best_score))
 
 
+print("\n=== Finalizing")
 X_test = prepare_heroes_participation(test_data.drop(["match_id"], 1))
 y_pred = best_clf.predict_proba(X_test)
 
