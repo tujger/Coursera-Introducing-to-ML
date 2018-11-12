@@ -39,6 +39,29 @@ Theta2_grad = zeros(size(Theta2));
 %         cost function computation is correct by verifying the cost
 %         computed in ex4.m
 %
+
+
+a1 = [ones(m, 1) X];
+
+z2 = a1 * Theta1';
+a2 = sigmoid(z2);
+a2 = [ones(size(a2,1), 1) a2];
+
+z3 = a2 * Theta2';
+a3 = sigmoid(z3);
+
+y_k = zeros(m, num_labels);
+for k = 1:num_labels
+    y_k(:,k) = y == k;
+end
+
+J = (1/m) * sum(sum((-y_k .* log(a3) - (1 - y_k) .* log(1 - a3))));
+
+J_reg = (lambda / (2 * m)) * (sum(sum(Theta1(:,2:end) .^ 2)) + sum(sum(Theta2(:,2:end) .^ 2)));
+
+J = J + J_reg;
+      
+      
 % Part 2: Implement the backpropagation algorithm to compute the gradients
 %         Theta1_grad and Theta2_grad. You should return the partial derivatives of
 %         the cost function with respect to Theta1 and Theta2 in Theta1_grad and
@@ -54,6 +77,38 @@ Theta2_grad = zeros(size(Theta2));
 %               over the training examples if you are implementing it for the 
 %               first time.
 %
+
+%for t = 1:m
+%  a1_ = [1 X(t,:)];
+%  z2_ = a1_ * Theta1';
+%  a2_ = sigmoid(z2_);
+%  a2_ = [ones(size(a2_,1), 1) a2_];
+
+%  z3_ = a2_ * Theta2';
+%  a3_ = sigmoid(z3_);
+  
+%  delta3_ = a3_ - y_k(t,:);
+  
+%  delta2_ = (Theta2' * delta3_') .* [1; sigmoidGradient(z2_)'];
+%  delta2_ = delta2_(2:end);
+  
+%  Theta2_grad = Theta2_grad + (delta3_ .* a2_')';
+%  Theta1_grad = Theta1_grad + (delta2_ .* a1_);
+%end  
+
+
+delta3 = a3 - y_k;
+
+delta2 = (delta3 * Theta2) .* [ones(size(z2,1),1) sigmoidGradient(z2)];
+delta2 = delta2(:, 2:end);
+
+Theta1_grad = delta2' * a1;
+Theta2_grad = delta3' * a2;
+
+Theta1_grad = Theta1_grad / m;
+Theta2_grad = Theta2_grad / m;
+
+
 % Part 3: Implement regularization with the cost function and gradients.
 %
 %         Hint: You can implement this around the code for
@@ -62,23 +117,12 @@ Theta2_grad = zeros(size(Theta2));
 %               and Theta2_grad from Part 2.
 %
 
+Theta1_grad_reg = Theta1(:, 2:end) * lambda / m;
+Theta2_grad_reg = Theta2(:, 2:end) * lambda / m;
 
-X = [ones(m, 1) X];
-y_k = zeros(m, num_labels);
 
-
-z2 = X * Theta1';
-a2 = sigmoid(z2);
-a2 = [ones(size(a2,1), 1) a2];
-
-z3 = a2 * Theta2';
-a3 = sigmoid(z3);
-
-for k = 1:num_labels
-    y_k(:,k) = y == k;
-end
-
-J = (1/m) * sum(sum((-y_k .* log(a3) - (1 - y_k) .* log(1 - a3))));
+Theta1_grad(:, 2:end) = Theta1_grad(:, 2:end) + Theta1_grad_reg;
+Theta2_grad(:, 2:end) = Theta2_grad(:, 2:end) + Theta2_grad_reg;
 
 
 
