@@ -1,0 +1,34 @@
+
+repositories {
+    jcenter()
+    mavenCentral()
+    maven { url "https://jitpack.io" }
+}
+
+group 'com.pantheon-inc'
+
+apply plugin: 'java'
+apply plugin: 'application'
+
+sourceSets {
+    main {
+        java {
+            srcDirs = ['src/main']
+        }
+    }
+//    test {
+//        java {
+//            srcDirs = ['src/test/java']
+//        }
+//    }
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    // https://mvnrepository.com/artifact/org.apache.spark/spark-core
+    compile 'org.apache.spark:spark-core_2.11:+'
+    compile 'org.apache.spark:spark-streaming_2.11:+'
+    compile 'org.apache.spark:spark-mllib_2.11:+'
+    compile 'com.github.fommil.netlib:all:+'
+
+}
