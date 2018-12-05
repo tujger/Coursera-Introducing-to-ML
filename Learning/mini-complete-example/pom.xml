@@ -8,7 +8,7 @@
   <dependencies>
     <dependency> <!-- Spark dependency -->
       <groupId>org.apache.spark</groupId>
-      <artifactId>spark-core_2.10</artifactId>
+      <artifactId>spark-core_2.22</artifactId>
       <version>1.1.0</version>
       <scope>provided</scope>
     </dependency>
